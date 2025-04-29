@@ -1,0 +1,116 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(YouApp());
+}
+
+class YouApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'you',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFFFF3E0), // لون دافئ
+        primarySwatch: Colors.deepOrange,
+        fontFamily: 'Arial',
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, String>> messages = [
+    {
+      'text': 'You’re loved more than you know.',
+      'image': 'https://i.imgur.com/3ZQ3Z5P.jpg',
+    },
+    {
+      'text': 'Today is yours. Make it warm and bright.',
+      'image': 'https://i.imgur.com/kWf2zN7.jpg',
+    },
+    {
+      'text': 'Keep going, you’re doing amazing.',
+      'image': 'https://i.imgur.com/1dU0hph.jpg',
+    },
+    {
+      'text': 'You bring light into others’ lives.',
+      'image': 'https://i.imgur.com/9t2wEpo.jpg',
+    },
+  ];
+
+  Map<String, String>? currentMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRandomMessage();
+  }
+
+  void _loadRandomMessage() {
+    final random = Random();
+    setState(() {
+      currentMessage = messages[random.nextInt(messages.length)];
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('you'),
+        centerTitle: true,
+        backgroundColor: Colors.deepOrangeAccent,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: currentMessage == null
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    currentMessage!['text']!,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 22,
+                      color: Colors.brown[800],
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      currentMessage!['image']!,
+                      height: 250,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                    onPressed: _loadRandomMessage,
+                    child: Text("New Message"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.deepOrange,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+      ),
+    );
+  }
+}
